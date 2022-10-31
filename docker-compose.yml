@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik
+    container_name: traefik_raidiam
+    hostname: traefik
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--providers.docker.exposedbydefault=false"
+      - "--accesslog"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    networks:
+      - traefik_network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  front:
+    container_name: front
+    hostname: front
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: front
+    restart: always
+    environment:
+      - COMPOSE_PROJECT_NAME
+    networks:
+      - traefik_network
+    volumes:
+      - ./:/app
+      - /app/node_modules/
+    command: yarn dev
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.raidiam-compress.compress=true"
+      - "traefik.http.routers.raidiam-front.rule=Host(`raidiam.localhost`)"
+      - "traefik.http.routers.raidiam-front.middlewares=raidiam-compress"
+      - "traefik.http.routers.raidiam-front.entrypoints=web"
+      - "traefik.http.services.raidiam-front.loadbalancer.server.port=80"
+
+networks:
+  traefik_network:
+    name: traefik_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.0.0/24
+          gateway: 172.10.0.1
+  
