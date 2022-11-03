@@ -32,6 +32,13 @@ yarn run test:unit --coverage
 
 [VSCode](https://code.visualstudio.com/) all recommended extensions are in `./.vscode/extensions.json`.
 
+## Accessing the project
+
+I used TRAEFIK as reverse proxy so it can get a prettier URL while working
+[http://raidiam.localhost/](http://raidiam.localhost/)
+If you want to check the TRAEFIK you can access via
+[http://traefik.localhost:8080](http://traefik.localhost:8080/dashboard/#/)
+
 ## My food for thoughts :)
 
 As it was a while that I didn't have contact with Vue, I got this opportunity to take it back and get a little bit into it, so the choosen version was Vue3 with TS, TailwindCSS as style framework, Cypress to (e2e test), ViTest to unit tests, Vue-Chart and Ag-Grid-Vue to data grid.
@@ -45,3 +52,13 @@ Some components are a little bit different from the others, to show more about t
 One nice thing it was the VGraph component whitch everytime that the component unmount we need to clear the `chartData` and we need to mount each time that will be on the screen, it's a issue with the `vue-chartjs` but it was simple to work with it using the component life-cycle.
 
 In sake of simplicity got the vanilla JS to manipulate the `VTabOption` component to format with the right class in some situations.
+
+At last but not least the test are splited in my own convension block, I feel more confortable reading in this way
+
+```javascript
+SETUP;
+
+EXECUTION;
+
+ASSERTION;
+```
