@@ -1,68 +1,47 @@
-# ./
+# Instructions
 
-This template should help get you started developing with Vue 3 in Vite.
+### Running the process
+
+It is recommended to `docker` to have a better experience while running the project
+
+```bash
+docker-compose up -d
+```
+
+To access the service is recommended to not have any things running on the port :80
+
+```bash
+kill -9 $(lsof -i :80 | awk '{if (NR!=1) {pids[$2] += 1; total += 1; }} END {for (pid in pids) { print  pid; }  }' | sort -n;)
+```
+
+The cypress test is in the cypress container
+
+```bash
+docker-compose up cypress
+```
+
+To run the unit tests locally
+
+```bash
+yarn install
+yarn build
+yarn run test:unit --coverage
+```
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[VSCode](https://code.visualstudio.com/) all recommended extensions are in `./.vscode/extensions.json`.
 
-## Type Support for `.vue` Imports in TS
+## My food for thoughts :)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+As it was a while that I didn't have contact with Vue, I got this opportunity to take it back and get a little bit into it, so the choosen version was Vue3 with TS, TailwindCSS as style framework, Cypress to (e2e test), ViTest to unit tests, Vue-Chart and Ag-Grid-Vue to data grid.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+All components are agnostic in the sense that it does not have many business logic inside it, the one that has the business logic it the view, for this challenge I used simplest as possible in the main time.
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+Inside the store we have the participant store, to have better reaction with the hooks inside the view.
 
-## Customize configuration
+Some components are a little bit different from the others, to show more about the life-cycle
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+One nice thing it was the VGraph component whitch everytime that the component unmount we need to clear the `chartData` and we need to mount each time that will be on the screen, it's a issue with the `vue-chartjs` but it was simple to work with it using the component life-cycle.
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+In sake of simplicity got the vanilla JS to manipulate the `VTabOption` component to format with the right class in some situations.
