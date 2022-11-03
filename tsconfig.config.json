@@ -3,7 +3,7 @@
   "include": ["vite.config.*", "vitest.config.*", "cypress.config.*", "playwright.config.*"],
   "compilerOptions": {
     "composite": true,
-    "types": ["node", "jest", "@types/jest"],
+    "types": ["node"],
     "target": "es2018",
     "module": "es2020",
     "lib": ["es2020", "dom"]
