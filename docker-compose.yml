@@ -50,6 +50,22 @@ services:
       - "traefik.http.routers.raidiam-front.entrypoints=web"
       - "traefik.http.services.raidiam-front.loadbalancer.server.port=80"
 
+  cypress:
+    container_name: cypress
+    hostname: cypress
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: cypress
+    environment:
+      - COMPOSE_PROJECT_NAME
+    networks:
+      - traefik_network
+    volumes:
+      - ./:/e2e
+      - /e2e/node_modules/
+    command: yarn run test:e2e
+
 networks:
   traefik_network:
     name: traefik_network
