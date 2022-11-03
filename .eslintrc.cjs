@@ -18,4 +18,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
   },
+  ignorePatterns: ["postcss.config.js", "tailwind.config.js"],
+  rules: {
+    "at-rule-no-unknown": 0,
+  },
 };
